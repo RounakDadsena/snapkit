@@ -1,21 +1,59 @@
 workflows:
-  version: 2
-  android-build:
+
+  android-build-workflow:
+
     name: Build Android APK
-    setup:
-      image: codemagic/android
+
+    labels:
+      - QA
+      - ${TENANT_NAME}  # Replace with your tenant name or environment variable if needed
+
+    instance_type: mac_mini_m2  # You can keep this for macOS builds if needed, or change to a Linux instance
+
+    max_build_duration: 60  # Set maximum build duration in minutes
+
+    inputs:  # Define build inputs if required
+      tenant_name:
+        description: The tenant name for this build
+        default: Codemagic
+
     environment:
+      groups:
+        - group_name  # Specify any group names if necessary
+
       vars:
-        ANDROID_HOME: "$HOME/Android/Sdk"
-        JAVA_HOME: "$HOME/.sdkman/candidates/java/current"
+        PUBLIC_ENV_VAR: "value here"  # Add any public environment variables needed for your build
+
+      flutter: stable  # If you're using Flutter, otherwise, remove this line
+      xcode: latest  # Optional: If you're targeting iOS, remove if it's not required
+      java: openjdk-11  # Ensure you're using an appropriate version of Java (you can change this)
+
+    cache:
+      cache_paths:
+        - ~/.gradle/caches  # Caching Gradle dependencies to speed up future builds
+
+    triggering:
+      events:
+        - push  # Trigger on push events
+      branch_patterns:
+        - pattern: '*'  # Include all branches
+          include: true
+          source: true
+      cancel_previous_builds: false  # Set to true if you want to cancel previous builds for the same branch
+
     scripts:
       - chmod +x gradlew
       - ./gradlew clean
-      - ./gradlew assembleRelease # Change to assembleDebug for a debug build
+      - ./gradlew assembleRelease  # Change to assembleDebug for a debug build
+      - echo "Build completed for ${{ inputs.tenant_name }}"  # Custom message based on input
+
     artifacts:
-      - app/build/outputs/apk/release/app-release.apk # Adjust path based on your build output
-    publish:
-      # Optionally, you can publish to Firebase or any other service (optional)
-      # Example: Firebase App Distribution
-      firebase:
-        token: $FIREBASE_TOKEN # Set your Firebase token in Codemagic environment
+      - app/build/outputs/apk/release/app-release.apk  # Path to the APK file that you want to save as an artifact
+
+    publishing:
+      email:
+        recipients:
+          - name@example.com  # Add the email addresses of recipients to notify after build completion
+
+      scripts:
+        - echo 'Post-publish script executed'
