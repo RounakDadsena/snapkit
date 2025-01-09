@@ -1,0 +1,21 @@
+workflows:
+  version: 2
+  android-build:
+    name: Build Android APK
+    setup:
+      image: codemagic/android
+    environment:
+      vars:
+        ANDROID_HOME: "$HOME/Android/Sdk"
+        JAVA_HOME: "$HOME/.sdkman/candidates/java/current"
+    scripts:
+      - chmod +x gradlew
+      - ./gradlew clean
+      - ./gradlew assembleRelease # Change to assembleDebug for a debug build
+    artifacts:
+      - app/build/outputs/apk/release/app-release.apk # Adjust path based on your build output
+    publish:
+      # Optionally, you can publish to Firebase or any other service (optional)
+      # Example: Firebase App Distribution
+      firebase:
+        token: $FIREBASE_TOKEN # Set your Firebase token in Codemagic environment
