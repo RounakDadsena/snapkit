@@ -6,54 +6,49 @@ workflows:
 
     labels:
       - QA
-      - ${TENANT_NAME}  # Replace with your tenant name or environment variable if needed
+      # Remove the line with TENANT_NAME if not needed
+      # - ${TENANT_NAME}
 
-    instance_type: mac_mini_m2  # You can keep this for macOS builds if needed, or change to a Linux instance
+    instance_type: mac_mini_m2
 
-    max_build_duration: 60  # Set maximum build duration in minutes
+    max_build_duration: 60
 
-    inputs:  # Define build inputs if required
+    inputs:
       tenant_name:
         description: The tenant name for this build
         default: Codemagic
 
     environment:
-      groups:
-        - group_name  # Specify any group names if necessary
-
       vars:
-        PUBLIC_ENV_VAR: "value here"  # Add any public environment variables needed for your build
-
-      flutter: stable  # If you're using Flutter, otherwise, remove this line
-      xcode: latest  # Optional: If you're targeting iOS, remove if it's not required
-      java: openjdk-11  # Ensure you're using an appropriate version of Java (you can change this)
+        PUBLIC_ENV_VAR: "value here"
+        # Define any necessary variables here, but don't include TENANT_NAME
 
     cache:
       cache_paths:
-        - ~/.gradle/caches  # Caching Gradle dependencies to speed up future builds
+        - ~/.gradle/caches
 
     triggering:
       events:
-        - push  # Trigger on push events
+        - push
       branch_patterns:
-        - pattern: '*'  # Include all branches
+        - pattern: '*'
           include: true
           source: true
-      cancel_previous_builds: false  # Set to true if you want to cancel previous builds for the same branch
+      cancel_previous_builds: false
 
     scripts:
       - chmod +x gradlew
       - ./gradlew clean
-      - ./gradlew assembleRelease  # Change to assembleDebug for a debug build
-      - echo "Build completed for ${{ inputs.tenant_name }}"  # Custom message based on input
+      - ./gradlew assembleRelease
+      - echo "Build completed"
 
     artifacts:
-      - app/build/outputs/apk/release/app-release.apk  # Path to the APK file that you want to save as an artifact
+      - app/build/outputs/apk/release/app-release.apk
 
     publishing:
       email:
         recipients:
-          - name@example.com  # Add the email addresses of recipients to notify after build completion
+          - name@example.com
 
       scripts:
         - echo 'Post-publish script executed'
