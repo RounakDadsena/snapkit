@@ -1,17 +1,15 @@
 workflows:
-
   android-build-workflow:
-
     name: Build Android APK
 
     labels:
       - QA
-      # Remove the line with TENANT_NAME if not needed
+      # You can remove TENANT_NAME if not needed
       # - ${TENANT_NAME}
 
-    instance_type: windows_x2
+    instance_type: windows_x2 # Use Windows environment for the build
 
-    max_build_duration: 60
+    max_build_duration: 60 # Max build duration in minutes
 
     inputs:
       tenant_name:
@@ -20,36 +18,35 @@ workflows:
 
     environment:
       vars:
-        PUBLIC_ENV_VAR: "value here"
-        # Define any necessary variables here, but don't include TENANT_NAME
+        PUBLIC_ENV_VAR: "value here" # Define any necessary environment variables here
 
     cache:
       cache_paths:
-        - ~/.gradle/caches
+        - ~/.gradle/caches # Caching Gradle dependencies for faster builds
 
     triggering:
       events:
         - push
       branch_patterns:
-        - pattern: '*'
+        - pattern: '*' 
           include: true
           source: true
       cancel_previous_builds: false
 
     scripts:
+      # Ensure Gradle is executable and perform the build
       - chmod +x gradlew
-      - ./gradlew clean
-      - ./gradlew assembleRelease
-      - echo "Build completed"
-      - ./gradlew assembleRelease --info  # Or use --debug for more detailed output
+      - ./gradlew clean # Clean the project to ensure no stale files
+      - ./gradlew assembleDebug # Build the debug APK (you were using assembleRelease earlier, which is for release APK)
+      - echo "Build completed" # Confirmation message after build
 
     artifacts:
+      # Location of the debug APK
       - app/build/outputs/apk/debug/app-debug.apk
 
     publishing:
       email:
         recipients:
-          - name@example.com
-
+          - shashidadsena30@gmail.com # Update this with your email address to get notifications
       scripts:
         - echo 'Post-publish script executed'
