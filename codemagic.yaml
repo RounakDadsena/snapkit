@@ -41,6 +41,7 @@ workflows:
       - ./gradlew clean
       - ./gradlew assembleRelease
       - echo "Build completed"
+      - ./gradlew assembleRelease --info  # Or use --debug for more detailed output
 
     artifacts:
       - app/build/outputs/apk/debug/app-debug.apk
