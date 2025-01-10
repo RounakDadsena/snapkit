@@ -17,7 +17,7 @@ import java.io.*
 
 const val RESULT_INTENT_EXTRA = "RESULT_INTENT"
 const val CREATIVE_KIT_LITE_REQUEST_CODE = 9834 // 3P app can decide your own request code
-const val CLIENT_ID = "73de4ff9-dfd1-4f48-ae88-ebe1dc212114"
+const val CLIENT_ID = "ca8f3501-4b30-4c93-9a95-5e9e60f34a73"
 const val LENS_ID = "b400bacdc15d482db8da9d6655c58658"
 const val SNAPCHAT_PACKAGE = "com.snapchat.android"
 
