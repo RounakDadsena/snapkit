@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             CLIENT_ID,
             CKLite.INTENT_TYPE_VIDEO,
             fileUri,
-            "Listen Prem Ki Naiyya On FilmUmusic");
+            "Video shared from $packageName");
         startActivity(intent);
     }
 
@@ -213,5 +213,4 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
     }
 }
-
 

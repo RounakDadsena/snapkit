@@ -14,7 +14,7 @@ import org.json.JSONObject
 object CKLite {
     private const val RESULT_INTENT_EXTRA = "RESULT_INTENT"
     private const val CREATIVE_KIT_LITE_REQUEST_CODE =
-        1512 // 3P app can decide your own request code
+        100 // 3P app can decide your own request code
     private const val SNAPCHAT_PACKAGE = "com.snapchat.android"
     private const val INTENT_URI_CAMERA = "snapchat://creativekit/camera"
     private const val INTENT_URI_PREVIEW = "snapchat://creativekit/preview"
